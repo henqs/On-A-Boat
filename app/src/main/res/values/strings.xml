@@ -1,0 +1,27 @@
+<resources>
+    <string name="app_name">Nautilus</string>
+    <string name="title_activity_main2">Main2Activity</string>
+
+
+    <!--Mainmenu buttons -->
+    <string name="button_mainAct">Dashboard</string>
+    <string name="button_opt">Options  </string>
+    <string name="button_stats">Statistics</string>
+
+
+    <!--Measurements -->
+    <string-array name="measurement_array">
+        <item>Meters per seconds</item>
+        <item>Knots per hour</item>
+        <item>Kilometers per hour</item>
+    </string-array>
+
+
+    <string name="spinner_Default">Meters per seconds</string>
+    <string name="checkBoxesKPH">Knots per hour</string>
+
+    <!-- OpenWeather API Key -->
+    <string name="open_weather_maps_app_id">86787283dec180f24821be49dcd5e9b2</string>
+
+    <string name="place_not_found">Sorry, no weather data found.</string>
+</resources>
