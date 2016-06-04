@@ -33,7 +33,7 @@ public class StartupActivity extends AppCompatActivity {
         mainActivity_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(StartupActivity.this, MainActivity.class);
+                Intent intent = new Intent(StartupActivity.this, DashboardActivity.class);
                 startActivity(intent);
             }
         });
@@ -45,7 +45,7 @@ public class StartupActivity extends AppCompatActivity {
         noPermission_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(StartupActivity.this, MainActivity.class);
+                Intent intent = new Intent(StartupActivity.this, DashboardActivity.class);
                 startActivity(intent);
             }
         });
@@ -67,7 +67,7 @@ public class StartupActivity extends AppCompatActivity {
         mHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                Intent intent = new Intent(StartupActivity.this, MainActivity.class);
+                Intent intent = new Intent(StartupActivity.this, DashboardActivity.class);
                 startActivity(intent);
             }
         }, 4000); // 4 seconds
@@ -94,7 +94,7 @@ public class StartupActivity extends AppCompatActivity {
             case MY_PERMISSIONS_REQUEST_GPS: {
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    //Starting up MainActivity
+                    //Starting up DashboardActivity
                     permissionLayout.setVisibility(View.GONE);
 
 

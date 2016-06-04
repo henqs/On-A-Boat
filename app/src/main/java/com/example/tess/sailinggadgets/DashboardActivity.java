@@ -1,7 +1,6 @@
 package com.example.tess.sailinggadgets;
 
 import android.Manifest;
-import android.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -33,7 +32,7 @@ import android.widget.Toast;
 import java.util.Formatter;
 import java.util.Locale;
 
-public class MainActivity extends AppCompatActivity implements SensorEventListener, LocationListener {
+public class DashboardActivity extends AppCompatActivity implements SensorEventListener, LocationListener {
 
     //For the compass needle
     private ImageView compassNeedle;//The image of the compass needle
@@ -53,7 +52,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_dashboard);
 
         //Compass
         compassNeedle = (ImageView) findViewById(R.id.imgCompass);//Ini the compass needles image.
@@ -84,12 +83,12 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
     //Update location needs to first check to see if it has permission to use FINE_LOCATION.
     public void updateLocation() {
-        if (ContextCompat.checkSelfPermission(MainActivity.this,
+        if (ContextCompat.checkSelfPermission(DashboardActivity.this,
                 Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) { //If the correct permission is not found then it will ask the user for it.
 
             //Requesting permission
-            ActivityCompat.requestPermissions(MainActivity.this,
+            ActivityCompat.requestPermissions(DashboardActivity.this,
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                     MY_PERMISSIONS_REQUEST_GPS);
 
@@ -246,13 +245,13 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                                 0, 1, this);
                         this.updateSpeed(null);
                     } catch (SecurityException se) {
-                        Toast.makeText(MainActivity.this, "GPS was denied somehow. This app wont work fully without it", Toast.LENGTH_SHORT)
+                        Toast.makeText(DashboardActivity.this, "GPS was denied somehow. This app wont work fully without it", Toast.LENGTH_SHORT)
                                 .show();
                     }
 
                 } else {
                     //Permission denied - tell the user
-                    Toast.makeText(MainActivity.this, "GPS was denied. This app wont work fully without it", Toast.LENGTH_SHORT)
+                    Toast.makeText(DashboardActivity.this, "GPS was denied. This app wont work fully without it", Toast.LENGTH_SHORT)
                             .show();
                 }
                 break;

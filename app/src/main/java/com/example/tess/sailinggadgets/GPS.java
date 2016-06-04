@@ -25,7 +25,7 @@ public class GPS  extends AppCompatActivity implements LocationListener  {
         @Override
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
-            setContentView(R.layout.activity_main);
+            setContentView(R.layout.activity_dashboard);
 
             longV = (TextView) findViewById(R.id.long_view);
             latV = (TextView) findViewById(R.id.lat_view);
