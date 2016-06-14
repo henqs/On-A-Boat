@@ -42,12 +42,24 @@ public class CLocation extends Location {
         String  strLatitude;
         strLatitude = Location.convert(super.getLatitude(), Location.FORMAT_SECONDS);
 
+        if(strLatitude.contains("-")){
+            strLatitude += " S";
+        }else{
+            strLatitude += " N";
+        }
+
         return strLatitude;
     }
 
     public String getStringLongitude(){
         String  strLongitude;
         strLongitude = Location.convert(super.getLongitude(), Location.FORMAT_SECONDS);
+
+        if(strLongitude.contains("-")){
+            strLongitude += " W";
+        }else{
+            strLongitude += " E";
+        }
 
         return strLongitude;
     }

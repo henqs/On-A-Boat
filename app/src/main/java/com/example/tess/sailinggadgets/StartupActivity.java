@@ -8,6 +8,8 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -19,7 +21,7 @@ public class StartupActivity extends AppCompatActivity {
     private Handler mHandler = new Handler();//Handler is used to allow the SplashScreen to be visible for a while.
     private static final int MY_PERMISSIONS_REQUEST_GPS = 123; //Permission request code.
 
-    private Button mainActivity_button;
+    private Button mainActivity_button, chartActivity_button;
 
     private Button noPermission_button;//Setting up the button for granting permissions.
     private LinearLayout permissionLayout;//The layout for the permission textview and button.
@@ -29,11 +31,22 @@ public class StartupActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_startup);
 
+
+
         mainActivity_button = (Button) findViewById(R.id.button_mainActivity);
         mainActivity_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(StartupActivity.this, DashboardActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        chartActivity_button = (Button) findViewById(R.id.button_Stats);
+        chartActivity_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(StartupActivity.this, ChartActivity.class);
                 startActivity(intent);
             }
         });
@@ -61,7 +74,7 @@ public class StartupActivity extends AppCompatActivity {
          //   nextActivity();
         }
     }
-
+/*
     //This method is to make sure the splashscreen is shown for a couple of seconds.
     public void nextActivity() {
         mHandler.postDelayed(new Runnable() {
@@ -72,8 +85,15 @@ public class StartupActivity extends AppCompatActivity {
             }
         }, 4000); // 4 seconds
     }
+*/
 
-    /////////Permission methods will be below here/////////
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main, menu);
+        return true;
+    }
+
+     /////////Permission methods will be below here/////////
     //Showing the permission Layout
     public void permissionNeeded() {
         permissionLayout.setVisibility(View.VISIBLE);
