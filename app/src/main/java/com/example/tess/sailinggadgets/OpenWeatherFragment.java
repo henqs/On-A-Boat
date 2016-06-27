@@ -3,8 +3,13 @@ package com.example.tess.sailinggadgets;
 
 import java.util.Locale;
 import org.json.JSONObject;
+
+import android.content.Intent;
+import android.location.Location;
+import android.location.LocationListener;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.Settings;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,7 +21,7 @@ import android.widget.Toast;
 /**
  * Created by Tess on 2016-05-19.
  */
-public class OpenWeatherFragment extends Fragment {
+public class OpenWeatherFragment extends Fragment{
 
     TextView windField, cityField;
     Handler handler;
@@ -29,14 +34,12 @@ public class OpenWeatherFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-
         View rootView = inflater.inflate(R.layout.fragment_openwe, container, false);
         cityField = (TextView)rootView.findViewById(R.id.txtCurrentWindSpeed);
         windField = (TextView)rootView.findViewById(R.id.txtCurrentWind);
 
         //  weatherIcon.setTypeface(weatherFont);
         return rootView;
-
     }
 
     @Override
@@ -75,25 +78,21 @@ public class OpenWeatherFragment extends Fragment {
         String cityString, windString;
 
         try {
-            cityString = (json.getString("name").toUpperCase(Locale.US) +
+           /* cityString = (json.getString("name").toUpperCase(Locale.US) +
                     ", " +
                     json.getJSONObject("sys").getString("country"));
 
-            cityField.setText(cityString);
-            DashboardActivity.setWindString(cityString);
+     */
 
             //JSONObject details = json.getJSONArray("weather").getJSONObject(0);
             JSONObject main = json.getJSONObject("wind");
-            windField.setText("Wind speed: " + main.getString("speed") + "\n"
-                            + "Wind direction: " +  main.getString("deg" ));
+            windField.setText(main.getString("speed"));
 
-
-
+            cityField.setText(main.getString("deg" ));
+            DashboardActivity.setWindString(main.getString("deg" ));
 
         }catch(Exception e){
             Log.e("SimpleWeather", "One or more fields not found in the JSON data");
         }
     }
-
-
 }

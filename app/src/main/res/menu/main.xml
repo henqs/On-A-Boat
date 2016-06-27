@@ -2,7 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.survivingwithandroid.weather.MainActivity" >
+    tools:context="" >
 
     <item android:id="@+id/action_donate"
         android:title="action_donate"
@@ -19,7 +19,7 @@
     <item android:id="@+id/action_refresh"
         android:title="action_refresh"
         android:orderInCategory="50"
-        android:icon="@drawable/my_logo"
+        android:icon="@drawable/my_logo2"
         />
 
     <item android:id="@+id/action_share"

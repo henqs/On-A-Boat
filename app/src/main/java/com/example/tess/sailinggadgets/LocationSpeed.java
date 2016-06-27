@@ -7,13 +7,13 @@ import android.annotation.SuppressLint;
 import android.location.Location;
 
 @SuppressLint("ParcelCreator")
-public class CLocation extends Location {
+public class LocationSpeed extends Location {
 
     private String measurement;
 
 
 
-    public CLocation(Location location, String measurement) {
+    public LocationSpeed(Location location, String measurement) {
         super(location);
         this.measurement = measurement;
     }
@@ -86,16 +86,16 @@ public class CLocation extends Location {
         return nAltitude;
     }
 
-    @Override
+    @Override //Current method of getting the speed of the cellphone
     public float getSpeed() {
         float nSpeed = super.getSpeed();
+        String measurement2 = DashboardActivity.getMeasurement2();
 
-        if (measurement.equals("Knots per Hour")){
+        if (measurement2.equals("Knots/Hour")){
             nSpeed = super.getSpeed() * 1.94384f;
-        } else if(measurement.equals("Kilometers per hour")){
+        } else if(measurement2.equals("Kilometers/Hour")){
             nSpeed = super.getSpeed() * 3.6f;
         }
-
         return nSpeed;
     }
 

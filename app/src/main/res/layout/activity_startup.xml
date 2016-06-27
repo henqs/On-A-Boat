@@ -40,7 +40,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_gravity="left">
+            >
 
              <Button
                  android:layout_width="match_parent"
@@ -66,6 +66,8 @@
                 android:text="@string/button_stats"
                 android:drawableLeft="@drawable/ic_insert_chart_black_24dp"
                 style="@style/Widget.AppCompat.Button.Colored"/>
+
+
         </LinearLayout>
 
 

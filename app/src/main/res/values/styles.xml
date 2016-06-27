@@ -1,7 +1,7 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/statusBar</item>
@@ -10,10 +10,11 @@
 
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
+        <item name="windowNoTitle">false</item>
+        <item name="icon">@drawable/my_logo2</item>
     </style>
 
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+   <!-- <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />-->
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
@@ -22,20 +23,29 @@
         <item name="android:windowBackground">@drawable/splash_background</item>
     </style>
 
-
-    <!-- Spinner -->
-
-    <style name="spinner_style">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:textColor">@color/textColor</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:background">@color/accentColor</item>
-        <!--item name="android:layout_margin">10dp</item>-->
-        <item name="android:paddingLeft">2dp</item>
-        <item name="android:paddingRight">2dp</item>
-       <!-- <item name="android:paddingTop">5dp</item>-->
-        <!--<item name="android:paddingBottom">5dp</item>-->
-        <item name="android:popupBackground">#DFFFFFFF</item>
+    <style name="Widget.ActionBar" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
+        <item name="icon">@drawable/my_logo2</item>
     </style>
 
+    <style name="Widget.ActionBar.Logo">
+        <item name="android:logo">@drawable/my_logo2</item>
+        <item name="android:displayOptions">useLogo|showHome</item>
+    </style>
+
+
+    <!-- Spinner -->
+    <!--
+        <style name="spinner_style">
+            <item name="android:layout_width">wrap_content</item>
+            <item name="android:textColor">@color/textColor</item>
+            <item name="android:layout_height">wrap_content</item>
+            <item name="android:background">@color/accentColor</item>
+            <item name="android:layout_margin">10dp</item>
+        <item name="android:paddingLeft">2dp</item>
+        <item name="android:paddingRight">2dp</item>
+       <item name="android:paddingTop">5dp</item>
+        <item name="android:paddingBottom">5dp</item>
+        <item name="android:popupBackground">#DFFFFFFF</item>
+    </style>
+    -->
 </resources>

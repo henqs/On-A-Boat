@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Im On A Boat</string>
+    <string name="app_name">On A Boat</string>
     <string name="title_activity_main2">Main2Activity</string>
 
 
@@ -11,16 +11,15 @@
 
     <!--Measurements -->
     <string-array name="measurement_array">
-        <item>Meters per seconds</item>
-        <item>Knots per hour</item>
-        <item>Kilometers per hour</item>
+        <item>Meters/Seconds</item>
+        <item>Knots/Hour</item>
+        <item>Kilometers/Hour</item>
     </string-array>
 
 
     <string name="spinner_Default">Meters per seconds</string>
-    <string name="checkBoxesKPH">Knots per hour</string>
 
-    <!-- OpenWeather API Key -->
+    <!-- OpenWeather API Key-->
     <string name="open_weather_maps_app_id">86787283dec180f24821be49dcd5e9b2</string>
 
     <string name="place_not_found">Sorry, no weather data found.</string>
