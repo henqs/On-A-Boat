@@ -32,20 +32,4 @@
         <item name="android:displayOptions">useLogo|showHome</item>
     </style>
 
-
-    <!-- Spinner -->
-    <!--
-        <style name="spinner_style">
-            <item name="android:layout_width">wrap_content</item>
-            <item name="android:textColor">@color/textColor</item>
-            <item name="android:layout_height">wrap_content</item>
-            <item name="android:background">@color/accentColor</item>
-            <item name="android:layout_margin">10dp</item>
-        <item name="android:paddingLeft">2dp</item>
-        <item name="android:paddingRight">2dp</item>
-       <item name="android:paddingTop">5dp</item>
-        <item name="android:paddingBottom">5dp</item>
-        <item name="android:popupBackground">#DFFFFFFF</item>
-    </style>
-    -->
 </resources>

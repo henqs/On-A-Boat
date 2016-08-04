@@ -1,7 +1,7 @@
 package com.example.tess.sailinggadgets;
 
 /**
- * Created by Tess on 2016-05-19.
+ * Created by Henrik on 2016-05-19.
  */
 import java.io.BufferedReader;
 import java.io.InputStreamReader;

@@ -3,47 +3,24 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#29B6F6">
+    android:background="@drawable/background_main">
 
 <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".DashboardActivity"
-    android:id="@+id/main_layout">
-
-    <!-- Wind Layout-->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="5dp"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
-        android:background="@drawable/border">
-
-        <LinearLayout
-            android:id="@+id/container"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <TextView
-                android:visibility="gone"
-                android:id="@+id/txtCurrentWind"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/textColor"
-                android:text="Wind speed: "
-                />
-
-        </LinearLayout>
-    </LinearLayout>
+    android:id="@+id/main_layout"
+    android:focusableInTouchMode="true"
+    android:focusable="true"
+    android:animateLayoutChanges="true"
+    >
 
     <!-- Speed Layout-->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="190dp"
+        android:layout_marginTop="5dp"
         android:layout_marginBottom="5dp"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
@@ -78,12 +55,11 @@
 
         </LinearLayout>
 
-
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_marginLeft="20dp">
+            android:layout_marginLeft="10dp">
 
             <!-- Compass Image-->
             <FrameLayout
@@ -130,9 +106,37 @@
         </LinearLayout>
 
 
+    <!-- Wind Layout-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:background="@drawable/border"
+        android:visibility="visible">
+
+        <LinearLayout
+            android:id="@+id/container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:visibility="gone"
+                android:id="@+id/txtCurrentWind"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/textColor"
+                android:text="Wind speed: "
+                />
+
+        </LinearLayout>
+    </LinearLayout>
 
 
-    <!--Linear laylout for the second Row -->
+    <!--Linear laylout for the Third Row -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="80dp"
@@ -234,6 +238,97 @@
         </fragment>
     </LinearLayout>
 
+    <!--Layout for weather api form -->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginBottom="5dp"
+        android:background="@drawable/border"
+        android:id="@+id/layout_weather_default">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="5dp">
+
+            <ImageView
+                android:id="@+id/down_arrow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ic_expand_more_black_40dp"/>
+
+            <ImageView
+                android:id="@+id/up_arrow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ic_expand_less_black_40dp"
+                android:visibility="gone"/>
+
+            <TextView
+                android:layout_marginTop="4dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/text_weather_form"
+                android:textSize="20sp"
+                android:textColor="@color/textColor"
+                />
+
+        </LinearLayout>
+
+        <!--Extended layout only shown if layout is clicked -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone"
+            android:id="@+id/layout_weather_shown">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/text_weather"/>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/input_layout_city"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/input_city"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:hint="@string/hint_city" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/input_layout_country_code"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/input_country"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/hint_country" />
+        </android.support.design.widget.TextInputLayout>
+
+        <Button android:id="@+id/btn_getWeather"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/btn_retrieve_data"
+            android:background="@color/colorAccent"
+            android:layout_marginTop="40dp"
+            android:textColor="@android:color/white"/>
+
+
+    </LinearLayout>
+    </LinearLayout>
 
 </LinearLayout>
 

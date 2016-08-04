@@ -1,5 +1,9 @@
 package com.example.tess.sailinggadgets;
 
+/**
+ * Created by Henrik Svensson on 2016-05-10.
+ */
+
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
@@ -11,28 +15,33 @@ import android.hardware.SensorManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.media.Image;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.animation.Animation;
+import android.text.TextWatcher;
 import android.view.animation.RotateAnimation;
 import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-import java.util.Formatter;
-import java.util.Locale;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.UiSettings;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
@@ -40,7 +49,6 @@ public class DashboardActivity extends AppCompatActivity implements SensorEventL
 
     //For the map API
     private GoogleMap mMap;
-
 
     //For the compass needle
     private ImageView compassNeedle;//The image of the compass needle
@@ -50,32 +58,34 @@ public class DashboardActivity extends AppCompatActivity implements SensorEventL
 
     ///GPS permission request code
     private static final int MY_PERMISSIONS_REQUEST_GPS = 123;
-    private static String measurement = "M/S", measurement2 = "M/S";
+    private static String stringMeasurement = "M/S";
     private Spinner spinner;
 
     //To get GPS data
     private LocationManager lm;//LocationManager is used to get the location
     TextView longV, latV, latV2; //Textviews to display the current long- and latitude
 
+
     //Weather data variables
-    private static boolean mHasItRun = false;//For updating the Wind conditions
+    private static boolean hasWeatherUpdaterRun = false;//For updating the Wind conditions
     private static String windString = "";
+    private TextInputLayout inputLayoutCity, inputLayoutCountry;
+    private EditText inputCity, inputCountry;
+    private Button btnRetrieve;
+    private ImageView upArrow, downArrow;
 
     //Layout variables
-    private LinearLayout map_layout;
+    private LinearLayout map_layout, layout_weather_default, layout_weather_shown;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
 
-
         //Getting the map support fragment
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map_fragment);
         mapFragment.getMapAsync(this);
-
-
 
         //Compass
         compassNeedle = (ImageView) findViewById(R.id.imgCompass);//Ini the compass needles image.
@@ -87,6 +97,54 @@ public class DashboardActivity extends AppCompatActivity implements SensorEventL
         latV = (TextView) findViewById(R.id.lat_view);
         latV2 = (TextView) findViewById(R.id.lat_direction);
 
+        /**
+        //Form for the weather API
+         **/
+        inputLayoutCity = (TextInputLayout) findViewById(R.id.input_layout_city);
+        inputLayoutCountry = (TextInputLayout) findViewById(R.id.input_layout_country_code);
+        inputCity = (EditText) findViewById(R.id.input_city);
+        inputCountry = (EditText) findViewById(R.id.input_country) ;
+        btnRetrieve = (Button) findViewById(R.id.btn_getWeather);
+        layout_weather_default = (LinearLayout) findViewById(R.id.layout_weather_default);
+        layout_weather_shown = (LinearLayout) findViewById(R.id.layout_weather_shown);
+        upArrow = (ImageView) findViewById(R.id.up_arrow);
+        downArrow = (ImageView) findViewById(R.id.down_arrow);
+        inputCity.addTextChangedListener(new MyTextWatcher(inputCity));
+        inputCountry.addTextChangedListener(new MyTextWatcher(inputCountry));
+
+
+        /**
+         * OnClickListener for the retrieve weather button
+         */
+        btnRetrieve.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                submitForm();
+                layout_weather_shown.setVisibility(View.GONE);
+                upArrow.setVisibility(View.GONE);
+                downArrow.setVisibility(View.VISIBLE);
+            }
+        });
+
+        /**
+         * OnClickListener for the layout that hold the form for the OpenWeather API
+         * Handles actions taken when the user clicks the layout
+         */
+        layout_weather_default.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(layout_weather_shown.getVisibility()==View.GONE){ //To show the extended layout
+                    layout_weather_shown.setVisibility(View.VISIBLE);
+                    upArrow.setVisibility(View.VISIBLE);
+                    downArrow.setVisibility(View.GONE);
+
+                } else if(layout_weather_shown.getVisibility()==View.VISIBLE){//To hide the extended layout
+                    layout_weather_shown.setVisibility(View.GONE);
+                    upArrow.setVisibility(View.GONE);
+                    downArrow.setVisibility(View.VISIBLE);
+                }
+            }
+        });
 
         updateLocation();//Calls the method for updating the location.
 
@@ -99,40 +157,28 @@ public class DashboardActivity extends AppCompatActivity implements SensorEventL
                 String spinnerSelect = measurement;
 
                 if (spinnerSelect == "Meters/Seconds"){
-                    measurement2 = "M/S";
+                    stringMeasurement = "M/S";
                 } else if(spinnerSelect == "Knots/Hour"){
-                    measurement2 = "Knt/H";
+                    stringMeasurement = "Knt/H";
                 }else if(spinnerSelect == "Kilometers/Hour"){
-                    measurement2 = "Km/H";
+                    stringMeasurement = "Km/H";
                 }
-
-
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parentView) {
-                measurement = "m/s";
-                measurement2 = "M/S";
+                stringMeasurement = "M/S";
             }//When nothing is selected on the spinner
-
         });
-
-        if (!mHasItRun) {
-            Toast.makeText(getBaseContext(), "Got the wind",
-                    Toast.LENGTH_SHORT).show();
-            updateWeather();
-            mHasItRun = true;
-        }else{
-            TextView windField = (TextView) findViewById(R.id.txtCurrentWind);
-            windField.setText(windString);
-        }
     }
 
-    public static String getMeasurement2(){
-        return measurement2;
+    public static String getStringMeasurement(){
+        return stringMeasurement;
     }
 
-    //Update location needs to first check to see if it has permission to use FINE_LOCATION.
+    /**
+     * Update location needs to first check to see if it has permission to use FINE_LOCATION.
+     */
     public void updateLocation() {
         if (ContextCompat.checkSelfPermission(DashboardActivity.this,
                 Manifest.permission.ACCESS_FINE_LOCATION)
@@ -149,22 +195,25 @@ public class DashboardActivity extends AppCompatActivity implements SensorEventL
             lm.requestLocationUpdates(LocationManager.GPS_PROVIDER,
                     0, 1, this);
             this.updateSpeed(null);
-
         }
     }
 
-    //When senses that the location has changed this method will be called.
-    // This method will be getting the GPS data on where this device is located.
-    //With this information it will call the update speed and update coords methods.
+    /**
+    *   This method is triggered when the device senses that the location has changed.
+    *   This method will be getting the GPS data on where this device is located.
+    *   With this information it will call the update speed and coordinates.
+     */
     @Override
     public void onLocationChanged(Location location) {
-        LocationSpeed myLocation = new LocationSpeed(location, measurement);
+        LocationSpeed myLocation = new LocationSpeed(location);
         this.updateSpeed(myLocation);
         this.updateCoordinates(myLocation);
         showMapLayout();
     }
 
-    //Method called if the provider is turned off
+    /**
+     *  Called if the provider is turned off
+     */
     @Override
     public void onProviderDisabled(String provider) {
         Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
@@ -173,7 +222,9 @@ public class DashboardActivity extends AppCompatActivity implements SensorEventL
                 Toast.LENGTH_SHORT).show();
     }
 
-    //Method called if the provider is turned back on
+    /**
+     * Called if the provider is turned back on
+     */
     @Override
     public void onProviderEnabled(String provider) {
         Toast.makeText(getBaseContext(), "Gps is turned on. ",
@@ -185,29 +236,33 @@ public class DashboardActivity extends AppCompatActivity implements SensorEventL
         //Not used
     }
 
-    //Method called if the app is resumed.
-    //Functions that were disabled if the app is paused needs to be reengaged.
+    /**
+     * Called if the app is resumed.
+     * Functions that were disabled if the app is paused needs to be reengaged.
+     */
     @Override
     protected void onResume() {
         super.onResume();
-        // for the system's orientation sensor registered listeners
         sm.registerListener(this, sm.getDefaultSensor(Sensor.TYPE_ORIENTATION),
-                SensorManager.SENSOR_DELAY_GAME);
+                SensorManager.SENSOR_DELAY_GAME);  // for the system's orientation sensor registered listeners
+
+        windString = "";
 
         try {
-        lm.requestLocationUpdates(LocationManager.GPS_PROVIDER,
-                0, 1, this);
-        this.updateSpeed(null);
-            Toast.makeText(getBaseContext(), "Location updates reengaged. ",
-                    Toast.LENGTH_SHORT).show();
-       }catch(SecurityException se){
-            Toast.makeText(getBaseContext(), "Location updates failed to reengage. ",
+            lm.requestLocationUpdates(LocationManager.GPS_PROVIDER,
+                    0, 1, this);
+            this.updateSpeed(null);
+        } catch (SecurityException se) {
+            Toast.makeText(getBaseContext(), "Location updates failed to restart. ",
                     Toast.LENGTH_SHORT).show();
             Log.e("This app", "exception", se);
-    }
+        }
     }
 
-    //Method called if the app is paused i.e if the user starts another app without fully closing this app.
+    /**
+     *  Called if the app is paused
+     *  i.e if the user starts another app without fully closing this app
+     */
     @Override
     protected void onPause() {
         super.onPause();
@@ -221,11 +276,12 @@ public class DashboardActivity extends AppCompatActivity implements SensorEventL
         }
     }
 
-    //Method for the compass needle. When the sensor senses a change this method will trigger.
-    //This method spins the compass needle to match the bearing of the device.
+    /**
+     *  Method for the compass needle. When the sensor senses a change this method will trigger.
+     *  This method spins the compass needle to match the bearing of the device.
+     */
     @Override
     public void onSensorChanged(SensorEvent event) {
-
         // get the angle around the z-axis rotated
         float degree = Math.round(event.values[0]);
 
@@ -255,61 +311,81 @@ public class DashboardActivity extends AppCompatActivity implements SensorEventL
         // Not used right now
     }
 
+    /**
+     *  Method used for updating the coordinates layout.
+     *  The actual coordinates will be formatted with DEGREES
+     *  Also updates coordinates for the map
+     */
     private void updateCoordinates(LocationSpeed location) {
         String strLongitude, strLatitude;
 
+     //The map needs a format of its own.
         if (location != null) {
             strLongitude = location.getStringLongitude();
             strLatitude = location.getStringLatitude();
+
+            mMap.clear();//Clears the previous marker
 
             longV.setText(strLongitude);
             latV.setText(strLatitude);
 
             LatLng currentPlace = new LatLng(location.getLatitude(), location.getLongitude());
-            mMap.addMarker(new MarkerOptions().position(currentPlace));
+            mMap.addMarker(new MarkerOptions()
+                    .position(currentPlace)
+                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.marker_medium)));
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom((currentPlace), 11.0F));
-
-            //({ lat: location.getLatitude(), lng: location.getLongitude() })
         }
     }
 
-    //Method for controlling the layouts
+    /**
+     * Method used to control the map layout
+     */
     public void showMapLayout(){
         map_layout = (LinearLayout) findViewById(R.id.map_layout);
         map_layout.setVisibility(View.VISIBLE);
-
-       // before_GPS_layout = (LinearLayout) findViewById(R.id.before_GPS_layout);
-       // before_GPS_layout.setVisibility(View.GONE);
     }
 
-    //Method for getting the wind and wind strength
-    private void updateWeather(){
-           // OpenWeatherFragment fm = new OpenWeatherFragment();
-            getSupportFragmentManager().beginTransaction().replace(R.id.container, new OpenWeatherFragment())
+    /**
+     *  Method for getting the wind and wind strength from the OpenWeather API
+     */
+    private void updateWeather(String longitude, String latitude){
+
+        Bundle bundle = new Bundle(); //Creates a bundle to send information about the location
+        bundle.putString("Long", longitude);   //parameters are (key, value).
+        bundle.putString("Lat", latitude);   //parameters are (key, value).
+        OpenWeatherFragment fm = new OpenWeatherFragment();
+        fm.setArguments(bundle);
+
+        getSupportFragmentManager().beginTransaction().replace(R.id.container, fm)
                     .commit();
     }
 
-    //Method for updating the speed. Ask the class LocationSpeed for the current speed of the device.
+    /**
+     *
+     *  Method for updating the speed.
+     *  Asks the class LocationSpeed for the current speed of the device.
+     */
     private void updateSpeed(LocationSpeed location) {
         float nCurrentSpeed = 0;
 
         if(location != null) { //As long as the device has a location
             nCurrentSpeed = location.getSpeed();
         }
-
-        Formatter fmt = new Formatter(new StringBuilder()); //Formatter is used to format the data received.
-        fmt.format(Locale.US, "%5.1f", nCurrentSpeed);
-        String strCurrentSpeed = fmt.toString();
         TextView txtCurrentSpeed = (TextView) this.findViewById(R.id.txtCurrentSpeed);
-        txtCurrentSpeed.setText(strCurrentSpeed + measurement2);
+
+        String currentSpeed = nCurrentSpeed + stringMeasurement;
+        if(txtCurrentSpeed != null){
+            txtCurrentSpeed.setText(currentSpeed);
+        }
     }
 
-    public static void setWindString(String windStringData) {
-    windString = windStringData;
-    }
 
-    //PERMISSIONS
-    //This method is for checking permission results.
+    /**
+     * PERMISSIONS
+     *
+     * This method checks the permissions that needs to be granted
+     */
+
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            String permissions[], int[] grantResults) {
@@ -344,11 +420,125 @@ public class DashboardActivity extends AppCompatActivity implements SensorEventL
         System.exit(0);
     }
 
-    //When the map is ready this method will be called
+    /**
+     * When the map is ready this method will be called
+     * Sets the options chosen for the map.
+     */
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        mMap.getUiSettings().setScrollGesturesEnabled(false);
-        mMap.getUiSettings().setZoomControlsEnabled(true);
+        mMap.getUiSettings().setScrollGesturesEnabled(false);//Cant scroll around the map
+        mMap.getUiSettings().setZoomControlsEnabled(true);//Sets an option to zoom in and out
     }
+
+    public static void setWindString(String windStringData) {
+        windString = windStringData;
+
+    }
+
+    public static String getWindString(){
+        return windString;
+    }
+
+
+    /**
+     ***
+     ****
+     ***** This section contains methods and a class for validating input into the weather API
+     ****
+     ***
+     **/
+
+    /**
+     * Validating form
+     * Making sure the input is correct
+     */
+    private void submitForm() {
+        if (!validateCity()) {
+            return;
+        }
+
+        if (!validateCountry()) {
+            return;
+        }
+
+        String city = inputCity.getText().toString();
+        String country = inputCountry.getText().toString();
+
+        updateWeather(city, country);
+    }
+
+    /**
+     * Method for focusing on view
+     */
+    private void requestFocus(View view) {
+        if (view.requestFocus()) {
+            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+        }
+    }
+
+    /**
+     * Validating the city input
+     */
+    private boolean validateCity() {
+        if (inputCity.getText().toString().trim().isEmpty()) {
+            inputLayoutCity.setError(getString(R.string.err_msg_city));
+            requestFocus(inputCity);
+            return false;
+        } else {
+            inputLayoutCity.setErrorEnabled(false);
+        }
+
+        return true;
+    }
+
+    /**
+     * Validating the country input
+     */
+    private boolean validateCountry() {
+        String email = inputCountry.getText().toString().trim();
+
+        if (email.isEmpty() || (email.length() > 2))  {
+            inputLayoutCountry.setError(getString(R.string.err_msg_country));
+            requestFocus(inputCountry);
+            return false;
+        } else {
+            inputLayoutCountry.setErrorEnabled(false);
+        }
+
+        return true;
+    }
+
+    /**
+     * Class for handling the input
+     */
+    private class MyTextWatcher implements TextWatcher {
+
+        private View view;
+
+        private MyTextWatcher(View view) {
+            this.view = view;
+        }
+
+        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+        }
+
+        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+        }
+
+        public void afterTextChanged(Editable editable) {
+            switch (view.getId()) {
+                case R.id.input_country:
+                    validateCountry();
+                    break;
+                case R.id.input_city:
+                    validateCity();
+                    break;
+            }
+        }
+    }
+
 }
+
+
+

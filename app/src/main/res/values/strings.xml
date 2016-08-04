@@ -17,10 +17,25 @@
     </string-array>
 
 
+
     <string name="spinner_Default">Meters per seconds</string>
 
     <!-- OpenWeather API Key-->
     <string name="open_weather_maps_app_id">86787283dec180f24821be49dcd5e9b2</string>
 
     <string name="place_not_found">Sorry, no weather data found.</string>
+
+
+
+        <!--City and country input -->
+        <string name="text_weather_form">Weather form</string>
+        <string name="text_weather">Enter following to get wind data</string>
+        <string name="hint_city">Closest city</string>
+        <string name="hint_country">Country code (Example: se for sweden</string>
+        <string name="action_settings">Settings</string>
+        <string name="btn_retrieve_data">UPDATE WEATHER</string>
+        <string name="err_msg_city">Enter a city name</string>
+        <string name="err_msg_country">Country code contains two letters</string>
+
+
 </resources>

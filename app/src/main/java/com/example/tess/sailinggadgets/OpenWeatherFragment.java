@@ -1,15 +1,8 @@
 package com.example.tess.sailinggadgets;
 
-
-import java.util.Locale;
 import org.json.JSONObject;
-
-import android.content.Intent;
-import android.location.Location;
-import android.location.LocationListener;
 import android.os.Bundle;
 import android.os.Handler;
-import android.provider.Settings;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,10 +12,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 /**
- * Created by Tess on 2016-05-19.
+ * Created by Henrik Svensson on 2016-05-19.
  */
 public class OpenWeatherFragment extends Fragment{
 
+    String longitude, latitude;
     TextView windField, cityField;
     Handler handler;
 
@@ -38,22 +32,28 @@ public class OpenWeatherFragment extends Fragment{
         cityField = (TextView)rootView.findViewById(R.id.txtCurrentWindSpeed);
         windField = (TextView)rootView.findViewById(R.id.txtCurrentWind);
 
-        //  weatherIcon.setTypeface(weatherFont);
         return rootView;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        updateWeatherData();
-      //  }
+
+        Bundle bundle = getArguments();
+        latitude = getArguments().getString("Lat");
+        longitude = bundle.getString("Long");
+
+        if(latitude != null && longitude != null){
+                updateWeatherData(latitude, longitude);
+
+        }
     }
 
-    private void updateWeatherData(){
+    private void updateWeatherData(final String latitude, final String longitude){
 
         new Thread(){
             public void run(){
-                final JSONObject json = RemoteFetch.getJSON(getActivity(),"Stockholm", "46");
+                final JSONObject json = RemoteFetch.getJSON(getActivity(),latitude, longitude);
                 if(json == null){
                     handler.post(new Runnable(){
                         public void run(){
@@ -75,19 +75,23 @@ public class OpenWeatherFragment extends Fragment{
     }
 
     private void renderWeather(JSONObject json){
-        String cityString, windString;
+
 
         try {
-           /* cityString = (json.getString("name").toUpperCase(Locale.US) +
+          /*
+          String cityString, windString;
+          cityString = (json.getString("name").toUpperCase(Locale.US) +
                     ", " +
                     json.getJSONObject("sys").getString("country"));
 
-     */
+        */
 
             //JSONObject details = json.getJSONArray("weather").getJSONObject(0);
             JSONObject main = json.getJSONObject("wind");
             windField.setText(main.getString("speed"));
 
+
+           // cityField.setText(cityString);
             cityField.setText(main.getString("deg" ));
             DashboardActivity.setWindString(main.getString("deg" ));
 
