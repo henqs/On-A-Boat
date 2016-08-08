@@ -15,7 +15,6 @@ import android.hardware.SensorManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.media.Image;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.design.widget.TextInputLayout;
@@ -65,7 +64,6 @@ public class DashboardActivity extends AppCompatActivity implements SensorEventL
     private LocationManager lm;//LocationManager is used to get the location
     TextView longV, latV, latV2; //Textviews to display the current long- and latitude
 
-
     //Weather data variables
     private static boolean hasWeatherUpdaterRun = false;//For updating the Wind conditions
     private static String windString = "";
@@ -104,6 +102,7 @@ public class DashboardActivity extends AppCompatActivity implements SensorEventL
         inputLayoutCountry = (TextInputLayout) findViewById(R.id.input_layout_country_code);
         inputCity = (EditText) findViewById(R.id.input_city);
         inputCountry = (EditText) findViewById(R.id.input_country) ;
+
         btnRetrieve = (Button) findViewById(R.id.btn_getWeather);
         layout_weather_default = (LinearLayout) findViewById(R.id.layout_weather_default);
         layout_weather_shown = (LinearLayout) findViewById(R.id.layout_weather_shown);
@@ -150,18 +149,20 @@ public class DashboardActivity extends AppCompatActivity implements SensorEventL
 
 
         spinner = (Spinner) findViewById(R.id.To_Units);
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+       /* spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {//When the user selects another item on the spinner
-                String measurement = spinner.getSelectedItem().toString();
+                measurement = spinner.getSelectedItem().toString();
                 String spinnerSelect = measurement;
 
                 if (spinnerSelect == "Meters/Seconds"){
                     stringMeasurement = "M/S";
-                } else if(spinnerSelect == "Knots/Hour"){
+                }else if(spinnerSelect == "Knots"){
                     stringMeasurement = "Knt/H";
                 }else if(spinnerSelect == "Kilometers/Hour"){
                     stringMeasurement = "Km/H";
+                }else if(spinnerSelect == "Miles/Hour"){
+                    setStringMeasurement("Miles/H");
                 }
             }
 
@@ -170,16 +171,23 @@ public class DashboardActivity extends AppCompatActivity implements SensorEventL
                 stringMeasurement = "M/S";
             }//When nothing is selected on the spinner
         });
+
+            public static void setStringMeasurement(String string){
+         stringMeasurement = string;
     }
 
-    public static String getStringMeasurement(){
+        public static String getStringMeasurement(){
         return stringMeasurement;
+    }
+
+        */
     }
 
     /**
      * Update location needs to first check to see if it has permission to use FINE_LOCATION.
      */
     public void updateLocation() {
+
         if (ContextCompat.checkSelfPermission(DashboardActivity.this,
                 Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) { //If the correct permission is not found then it will ask the user for it.
@@ -205,7 +213,9 @@ public class DashboardActivity extends AppCompatActivity implements SensorEventL
      */
     @Override
     public void onLocationChanged(Location location) {
-        LocationSpeed myLocation = new LocationSpeed(location);
+        String measurement = spinner.getSelectedItem().toString();
+        LocationSpeed myLocation = new LocationSpeed(location, measurement);
+
         this.updateSpeed(myLocation);
         this.updateCoordinates(myLocation);
         showMapLayout();
@@ -247,8 +257,10 @@ public class DashboardActivity extends AppCompatActivity implements SensorEventL
                 SensorManager.SENSOR_DELAY_GAME);  // for the system's orientation sensor registered listeners
 
         windString = "";
-
+/*
         try {
+
+
             lm.requestLocationUpdates(LocationManager.GPS_PROVIDER,
                     0, 1, this);
             this.updateSpeed(null);
@@ -257,6 +269,7 @@ public class DashboardActivity extends AppCompatActivity implements SensorEventL
                     Toast.LENGTH_SHORT).show();
             Log.e("This app", "exception", se);
         }
+        */
     }
 
     /**
@@ -269,11 +282,13 @@ public class DashboardActivity extends AppCompatActivity implements SensorEventL
         //Stop the  Sensor listener
         sm.unregisterListener(this);
 
+        /*
         try { //Stop the location manager
             lm.removeUpdates(this);
         }catch(SecurityException se){
             Log.e("This app", "exception", se);
         }
+        */
     }
 
     /**
@@ -296,7 +311,7 @@ public class DashboardActivity extends AppCompatActivity implements SensorEventL
                 0.5f);
 
         // how long the animation will take place
-        ra.setDuration(210);
+        ra.setDuration(400);
 
         // set the animation after the end of the reservation status
         ra.setFillAfter(true);
@@ -433,11 +448,6 @@ public class DashboardActivity extends AppCompatActivity implements SensorEventL
 
     public static void setWindString(String windStringData) {
         windString = windStringData;
-
-    }
-
-    public static String getWindString(){
-        return windString;
     }
 
 

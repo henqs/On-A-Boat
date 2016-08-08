@@ -313,8 +313,10 @@
 
             <EditText
                 android:id="@+id/input_country"
+                android:singleLine="true"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:imeOptions="actionDone"
                 android:hint="@string/hint_country" />
         </android.support.design.widget.TextInputLayout>
 

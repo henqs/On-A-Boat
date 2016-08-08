@@ -9,8 +9,12 @@ import android.location.Location;
 @SuppressLint("ParcelCreator")
 public class LocationSpeed extends Location {
 
-    public LocationSpeed(Location location) {
+    String measurement2;
+
+    public LocationSpeed(Location location, String measurement1) {
         super(location);
+        this.measurement2 = measurement1;
+        setMeasurement(measurement2);
     }
 
     @Override
@@ -73,17 +77,28 @@ public class LocationSpeed extends Location {
         double nAltitude = super.getAltitude();
         return nAltitude;
     }
+    public void setMeasurement(String string){
+        measurement2 = string;
+    }
+
+    public String getMeasurement(){
+        return measurement2;
+    }
 
     @Override //Current method of getting the speed of the device
     public float getSpeed() {
         float nSpeed = super.getSpeed();//Gets the speed in Meters per second
-        String measurement2 = DashboardActivity.getStringMeasurement();//Get the wanted measurement method
 
-        if (measurement2 == "Knt/H"){//Knots per hour
-            nSpeed = super.getSpeed() * 1.94384f;//From m/s to knots/h
-        } else if(measurement2 == "Km/H"){//Kilometers per hour
-            nSpeed = super.getSpeed() * 3.6f;//From m/s to km/h
+        String measure = getMeasurement();
+
+        if (measure.equals("Knots")){//Knots per hour
+           nSpeed = super.getSpeed() * 1.94384f;//From m/s to knots/h
+        } else if(measure.equals("Kilometers/Hour")){//Kilometers per hour
+           nSpeed = super.getSpeed() * 3.6f;//From m/s to km/h
+        } else if(measure.equals("Miles/Hour")){
+            nSpeed = super.getSpeed() * 2.236936f;
         }
         return nSpeed;
+
     }
 }

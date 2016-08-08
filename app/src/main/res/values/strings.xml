@@ -12,8 +12,9 @@
     <!--Measurements -->
     <string-array name="measurement_array">
         <item>Meters/Seconds</item>
-        <item>Knots/Hour</item>
+        <item>Knots</item>
         <item>Kilometers/Hour</item>
+        <item>Miles/Hour</item>
     </string-array>
 
 
