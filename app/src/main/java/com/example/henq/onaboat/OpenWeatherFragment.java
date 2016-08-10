@@ -1,4 +1,4 @@
-package com.example.tess.sailinggadgets;
+package com.example.henq.onaboat;
 
 import org.json.JSONObject;
 import android.os.Bundle;

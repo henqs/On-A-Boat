@@ -1,4 +1,4 @@
-package com.example.tess.sailinggadgets;
+package com.example.henq.onaboat;
 
 /**
  * Created by Henrik on 2016-05-19.
@@ -11,7 +11,6 @@ import java.net.URL;
 import org.json.JSONObject;
 
 import android.content.Context;
-import android.util.Log;
 
 public class RemoteFetch {
 

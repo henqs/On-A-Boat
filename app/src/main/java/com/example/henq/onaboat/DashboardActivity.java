@@ -1,4 +1,4 @@
-package com.example.tess.sailinggadgets;
+package com.example.henq.onaboat;
 
 /**
  * Created by Henrik Svensson on 2016-05-10.
@@ -22,13 +22,11 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
-import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.text.TextWatcher;
 import android.view.animation.RotateAnimation;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;

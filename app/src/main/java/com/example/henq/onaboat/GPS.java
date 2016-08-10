@@ -1,4 +1,4 @@
-package com.example.tess.sailinggadgets;
+package com.example.henq.onaboat;
 
 import android.content.Context;
 import android.content.Intent;

@@ -1,4 +1,4 @@
-package com.example.tess.sailinggadgets;
+package com.example.henq.onaboat;
 
 /**
  * Created by Henrik Svensson on 2016-05-17.
